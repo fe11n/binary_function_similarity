@@ -89,7 +89,6 @@ DATASET_FOLDER = os.path.join(REPO_PATH, "DBs")
 MODELS_FOLDER = os.path.join(REPO_PATH, "Models")
 RESULTS_FOLDER = os.path.join(REPO_PATH, "Results", "data")
 
-
 def compute_sha256(file_path):
     """Compute the sha256 for the file in file_path."""
     blocksize = 65536
@@ -116,7 +115,7 @@ def download_binaries():
 
             zip_path = os.path.join(BINARIES_FOLDER, zip_name)
             print("Downloading {} ...".format(zip_name))
-            gdown.download(id=gid, output=zip_path, quiet=False)
+            gdown.download(id=gid, output=zip_path, quiet=False, proxy=)
 
             if not os.path.isfile(zip_path):
                 print("[!] Error: file {} not found".format(zip_path))
@@ -222,6 +221,13 @@ def download_results_data():
 @click.option('--features', is_flag=True)
 @click.option('--results', is_flag=True)
 def main(binaries, features, results):
+    proxies = {
+    'http': 'http://127.0.0.1:17890',
+    'https': 'http://127.0.0.1:17890',
+    }
+    os.environ['HTTP_PROXY'] = proxies['http']
+    os.environ['HTTPS_PROXY'] = proxies['https']
+    
     """Download the dataset from Google Drive."""
     if binaries:
         download_binaries()
